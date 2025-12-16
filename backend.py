@@ -15,7 +15,10 @@
 # - Detaylı Ayarlar
 # - Raporlar (Görüntüle + CSV/PDF Export)
 # ============================================================================
-
+import os
+import sys
+import sqlite3
+from typing import Optional, Dict
 import sqlite3
 import hashlib
 from datetime import datetime, timedelta
@@ -30,7 +33,15 @@ import os
 # VERİTABANI AYARLARI
 # ============================================================================
 
-DB_NAME = "borc_takip.db"
+def get_db_path():
+    if hasattr(sys, "_MEIPASS"):
+        base_path = os.path.dirname(sys.executable)
+    else:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, "borc_takip.db")
+
+DB_NAME = get_db_path()
 
 def get_db_connection():
     """Veritabanı bağlantısı oluşturur."""
@@ -3159,3 +3170,6 @@ if __name__ == "__main__":
     print("=" * 70)
     print("✅ Tüm testler tamamlandı!")
     print("=" * 70)
+
+if __name__ == "__main__":
+    init_db()
